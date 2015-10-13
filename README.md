@@ -1,10 +1,14 @@
-# <x-treeview>
+# &lt;x-treeview&gt;
 
 A set of elements implementing a treeview:
 
 - `<x-treeview>` The view itself
 - `<x-treegroup>` A group of items
 - `<x-treeitem>` A leaf node
+
+## Demo
+
+https://sparhami.github.io/x-treeview/
 
 ## Features
 
