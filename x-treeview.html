@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<link rel="import" href="treeselection.html">
+<script src="treeselection.js"></script>
 
 <script>
 var XTreeView = (function() {
@@ -41,7 +41,7 @@ var XTreeView = (function() {
     this.tabIndex = 0;
     this.setAttribute('role', 'tree');
 
-    initTreeSelection(this);
+    attachTreeSelection(this);
   };
 
   return document.registerElement('x-treeview', {
