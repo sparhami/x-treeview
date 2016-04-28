@@ -35,11 +35,11 @@ var XTreeItem = (function() {
       }
 
       :host(:focus)::after {
-        background-color: #2962FF;
+        background-color: var(--active-background-color);
       }
 
       :host(:focus) {
-        color: white;
+        color: var(--active-color);
       }
 
       :host([aria-selected="true"])::after,

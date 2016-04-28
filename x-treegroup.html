@@ -49,11 +49,11 @@ var XTreeGroup = (function() {
       }
 
       :host(:focus) #label::after {
-        background-color: #2962FF;
+        background-color: var(--active-background-color);
       }
 
       :host(:focus) #label {
-        color: white;
+        color: var(--active-color);
       }
 
       :host([aria-selected="true"]) #label::after,
