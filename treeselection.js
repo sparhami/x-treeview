@@ -68,14 +68,22 @@ var attachTreeSelection = (function() {
     walker.currentNode.focus();
   }
 
-  function next(walker) {
+  function handleBoundary(walker, forward, wrap) {
+    if (forward == wrap) {
+      first(walker);
+    } else {
+      last(walker);
+    }
+  }
+
+  function next(walker, wrap) {
     if (isExpandedGroup(walker.currentNode)
         || walker.currentNode == walker.root) {
       walker.nextNode();
     } else {
       while(!walker.nextSibling()) {
         if (!walker.parentNode()) {
-          last(walker);
+          handleBoundary(walker, true, wrap);
           break;
         }
       }
@@ -84,9 +92,11 @@ var attachTreeSelection = (function() {
     walker.currentNode.focus();
   }
 
-  function previous(walker) {
+  function previous(walker, wrap) {
     if (!walker.previousSibling()) {
-      walker.parentNode();
+      if (!walker.parentNode()) {
+        handleBoundary(walker, false, wrap);
+      }
     } else {
       while(isExpandedGroup(walker.currentNode) && walker.lastChild());
     }
@@ -121,9 +131,10 @@ var attachTreeSelection = (function() {
     }
   }
 
-  return function(el) {
+  return function(el, config) {
     var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, filter);
     var selected = walker.root;
+    var { wrap = false } = config || {};
 
     el.addEventListener('keydown', function(e) {
       var handled = true;
@@ -142,13 +153,13 @@ var attachTreeSelection = (function() {
           leftArrow(walker);
           break;
         case 38: // up
-          previous(walker);
+          previous(walker, wrap);
           break;
         case 39: // right
           rightArrow(walker);
           break;
         case 40: // down
-          next(walker);
+          next(walker, wrap);
           break;
         case 106: // keypad *
           expandAll(walker);
