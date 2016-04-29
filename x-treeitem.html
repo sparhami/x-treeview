@@ -16,8 +16,8 @@ limitations under the License.
 -->
 
 <script>
-var XTreeItem = (function() {
-  var tmpl = document.createElement('template');
+const XTreeItem = (function() {
+  const tmpl = document.createElement('template');
   tmpl.innerHTML = `
     <style>
       :host {
@@ -55,10 +55,10 @@ var XTreeItem = (function() {
     <content></content>
   `;
  
-  var p = Object.create(HTMLElement.prototype);
+  const p = Object.create(HTMLElement.prototype);
 
   p.createdCallback = function() {
-    var sr = this.createShadowRoot();
+    const sr = this.createShadowRoot();
     sr.appendChild(tmpl.content.cloneNode(true));
 
     this.tabIndex = -1;

@@ -163,10 +163,10 @@ limitations under the License.
       // following: 
       // treegroups and treeitems should both be focusable and have role="treeitem"
       // treegroups should also have an aria-expanded attribute
-      var p = Object.create(XTreeGroup.prototype);
+      const p = Object.create(XTreeGroup.prototype);
 
       p.load = function() {
-        var loadingDiv = document.createElement('div');
+        const loadingDiv = document.createElement('div');
         loadingDiv.textContent = 'Loading';
         this.shadowRoot.appendChild(loadingDiv);
         this.initialized = true;
@@ -175,7 +175,7 @@ limitations under the License.
           this.shadowRoot.removeChild(loadingDiv);
 
           items.forEach((item) => { 
-            var el = document.createElement('x-treeitem');
+            const el = document.createElement('x-treeitem');
             el.textContent = item;
             this.appendChild(el);
           });

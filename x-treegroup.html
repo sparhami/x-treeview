@@ -16,8 +16,8 @@ limitations under the License.
 -->
 
 <script>
-var XTreeGroup = (function() {
-  var tmpl = document.createElement('template');
+const XTreeGroup = (function() {
+  const tmpl = document.createElement('template');
   tmpl.innerHTML = `
     <style>
       :host {
@@ -88,12 +88,12 @@ var XTreeGroup = (function() {
     </div>
   `;
 
-  var p = Object.create(HTMLElement.prototype);
+  const p = Object.create(HTMLElement.prototype);
 
   p.createdCallback = function() {
-    var sr = this.createShadowRoot();
+    const sr = this.createShadowRoot();
     sr.appendChild(tmpl.content.cloneNode(true));
-    var toggler = sr.getElementById('toggler');
+    const toggler = sr.getElementById('toggler');
 
     this.tabIndex = -1;
     this.setAttribute('role', 'treeitem');

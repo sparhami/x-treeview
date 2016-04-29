@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-var attachTreeSelection = (function() {
-  var filter = {
+const attachTreeSelection = (function() {
+  const filter = {
     acceptNode: function(node) {
-      var role = node.getAttribute('role');
+      const role = node.getAttribute('role');
 
       if (role === 'treeitem') {
         return NodeFilter.FILTER_ACCEPT;
@@ -41,7 +41,7 @@ var attachTreeSelection = (function() {
   }
 
   function setSelected(el, selected) {
-    var evtName = selected ? 'selected' : 'deselected';
+    const evtName = selected ? 'selected' : 'deselected';
 
     el.tabIndex = selected ? 0 : -1;
     el.setAttribute('aria-selected', selected);
@@ -125,19 +125,19 @@ var attachTreeSelection = (function() {
   }
 
   function expandAll(walker) {
-    var groups = walker.root.querySelectorAll('[aria-expanded]');
-    for (var i = 0; i < groups.length; i += 1) {
+    const groups = walker.root.querySelectorAll('[aria-expanded]');
+    for (const i = 0; i < groups.length; i += 1) {
       setExpanded(groups[i], true);
     }
   }
 
   return function(el, config) {
-    var walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, filter);
-    var selected = walker.root;
-    var { wrap = false } = config || {};
+    const { wrap = false } = config || {};
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, filter);
+    let selected = walker.root;
 
     el.addEventListener('keydown', function(e) {
-      var handled = true;
+      let handled = true;
 
       switch (e.keyCode) {
         case 13: // enter
@@ -175,7 +175,7 @@ var attachTreeSelection = (function() {
     });
 
     el.addEventListener('focus', function(e) {
-      var item = e.target.closest('[role="treeitem"]');
+      const item = e.target.closest('[role="treeitem"]');
 
       if (!item || item === selected) {
         return;
@@ -190,7 +190,7 @@ var attachTreeSelection = (function() {
     }, true);
 
     el.addEventListener('dblclick', function(e) {
-      var item = e.target.closest('[role="treeitem"]');
+      const item = e.target.closest('[role="treeitem"]');
 
       if (!item) {
         return;

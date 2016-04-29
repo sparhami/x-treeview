@@ -18,8 +18,8 @@ limitations under the License.
 <script src="treeselection.js"></script>
 
 <script>
-var XTreeView = (function() {
-  var tmpl = document.createElement('template');
+const XTreeView = (function() {
+  const tmpl = document.createElement('template');
   tmpl.innerHTML = `
     <style>
       :host {
@@ -32,10 +32,10 @@ var XTreeView = (function() {
     <content></content>
   `;
 
-  var p = Object.create(HTMLElement.prototype);
+  const p = Object.create(HTMLElement.prototype);
 
   p.createdCallback = function() {
-    var sr = this.createShadowRoot();
+    const sr = this.createShadowRoot();
     sr.appendChild(tmpl.content.cloneNode(true));
 
     this.tabIndex = 0;
