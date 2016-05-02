@@ -77,13 +77,14 @@ const attachTreeSelection = (function() {
   }
 
   function next(walker, wrap, trap) {
-    if (trap) {
+    if (walker.currentNode === walker.root) {
+      first(walker);
+    } else if (trap) {
       if (!walker.nextSibling() && wrap) {
         while(walker.previousSibling());
       }
-    } else if (isExpandedGroup(walker.currentNode)
-        || walker.currentNode == walker.root) {
-      walker.nextNode();
+    } else if (isExpandedGroup(walker.currentNode)) {
+      walker.firstChild();
     } else {
       while(!walker.nextSibling()) {
         if (!walker.parentNode()) {
@@ -97,7 +98,9 @@ const attachTreeSelection = (function() {
   }
 
   function previous(walker, wrap, trap) {
-    if (trap) {
+    if (walker.currentNode === walker.root) {
+      last(walker);
+    } else if (trap) {
       if (!walker.previousSibling() && wrap) {
         while(walker.nextSibling());
       }
