@@ -137,7 +137,7 @@ const attachTreeSelection = (function() {
 
   function expandAll(walker) {
     const groups = walker.root.querySelectorAll('[aria-expanded]');
-    for (const i = 0; i < groups.length; i += 1) {
+    for (let i = 0; i < groups.length; i += 1) {
       setExpanded(groups[i], true);
     }
   }
