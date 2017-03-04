@@ -79,43 +79,46 @@ const XTreeGroup = (function() {
     </style>
 
     <div id='items' role='group'>
-      <content select='[role="treeitem"], [role="group"], [role="separator"]'>
-      </content>
+      <slot></slot>
     </div>
     <div id='label'>
       <span id='toggler'></span>
-      <content></content>
+      <slot name="title"></slot>
     </div>
   `;
 
-  const p = Object.create(HTMLElement.prototype);
+  class XTreeGroup extends HTMLElement {
+    constructor() {
+      super();
 
-  p.createdCallback = function() {
-    const sr = this.createShadowRoot();
-    sr.appendChild(tmpl.content.cloneNode(true));
-    const toggler = sr.getElementById('toggler');
+      const sr = this.attachShadow({ mode: 'closed' });
+      sr.appendChild(tmpl.content.cloneNode(true));
+      const toggler = sr.getElementById('toggler');
 
-    this.tabIndex = -1;
-    this.setAttribute('role', 'treeitem');
-    this.setAttribute('aria-expanded', this.isExpanded());
+      toggler.addEventListener('click', this.handleClick.bind(this));
+    }
 
-    toggler.addEventListener('click', this.handleClick.bind(this));
-  };
+    connectedCallback() {
+      this.tabIndex = -1;
+      this.setAttribute('role', 'treeitem');
+      this.setAttribute('aria-expanded', this.isExpanded());
+    }
 
-  p.isExpanded = function() {
-    return this.getAttribute('aria-expanded') !== 'false';
-  };
+    isExpanded() {
+      return this.getAttribute('aria-expanded') !== 'false';
+    }
 
-  p.setExpanded = function(expanded) {
-    this.setAttribute('aria-expanded', expanded);
-  };
+    setExpanded(expanded) {
+      this.setAttribute('aria-expanded', expanded);
+    }
 
-  p.handleClick = function() {
-    this.setExpanded(!this.isExpanded());
-  };
+    handleClick() {
+      this.setExpanded(!this.isExpanded());
+    }
+  }
 
-  return document.registerElement('x-treegroup', {
-    prototype: p
-  });
+  customElements.define('x-treegroup', XTreeGroup);
+
+  return XTreeGroup;  
 })();
 </script>

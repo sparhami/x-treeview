@@ -29,23 +29,27 @@ const XTreeView = (function() {
       }
     </style>
 
-    <content></content>
+    <slot></slot>
   `;
 
-  const p = Object.create(HTMLElement.prototype);
+  class XTreeView extends HTMLElement {
+    constructor() {
+      super();
 
-  p.createdCallback = function() {
-    const sr = this.createShadowRoot();
-    sr.appendChild(tmpl.content.cloneNode(true));
+      const sr = this.attachShadow({ mode: 'closed' });
+      sr.appendChild(tmpl.content.cloneNode(true));
 
-    this.tabIndex = 0;
-    this.setAttribute('role', 'tree');
+      attachTreeSelection(this);
+    }
 
-    attachTreeSelection(this);
-  };
+    connectedCallback() {
+      this.tabIndex = 0;
+      this.setAttribute('role', 'tree');
+    }
+  }
 
-  return document.registerElement('x-treeview', {
-    prototype: p
-  });
+  customElements.define('x-treeview', XTreeView);
+
+  return XTreeView;
 })();
 </script>

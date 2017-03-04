@@ -64,7 +64,7 @@ limitations under the License.
       <h2>Demo</h2>
       <x-treeview>
         <x-treegroup title="Starts collapsed" aria-expanded="false">
-          Starts Collapsed
+          <span slot="title">Starts Collapsed</span>
           <!-- This element with role="group" is needed for screen readers to
                read out the item's group position correctly. -->
           <div role="group">
@@ -77,10 +77,10 @@ limitations under the License.
         <div class="separator" role="separator"></div>
         <x-treeitem title="Item With Super Long Text">Item With Super Long Text</x-treeitem>
         <x-treegroup>
-          <span>Nested group</span>
+          <span slot="title">Nested group</span>
           <x-treeitem>Sibling of the group</x-treeitem>
           <x-treegroup>
-            <span>I'm nested</span>
+            <span slot="title">I'm nested</span>
             <div role="group">
               <x-treeitem>A leaf</x-treeitem>
               <x-treeitem>Another leaf</x-treeitem>
@@ -88,7 +88,7 @@ limitations under the License.
           </x-treegroup>
         </x-treegroup>
         <x-treegroup>
-          <span>Scrolling</span>
+          <span slot="title">Scrolling</span>
           <div role="group">
             <x-treeitem>One</x-treeitem>
             <x-treeitem>Two</x-treeitem>
@@ -113,7 +113,7 @@ limitations under the License.
       </p>
       <x-treeview>
         <lazy-treegroup id="LazyGroup" aria-expanded="false">
-          <span>Dynamic</span>
+          <spani slot="title">Dynamic</span>
         </lazy-treegroup>
       </x-treeview>
     </section>
@@ -139,7 +139,7 @@ limitations under the License.
       <h2>Using plain DOM</h2>
       <x-treeview>
         <div class="item" tabindex="-1" role="treeitem" aria-expanded="true">
-          <span class="group-label">Hello</span>
+          <span class="group-label" slot="title">Hello</span>
           <div role="group">
             <div class="item" tabindex="-1" role="treeitem">Fee</div>
             <div class="item" tabindex="-1" role="treeitem">Fi</div>
@@ -163,33 +163,31 @@ limitations under the License.
       // following: 
       // treegroups and treeitems should both be focusable and have role="treeitem"
       // treegroups should also have an aria-expanded attribute
-      const p = Object.create(XTreeGroup.prototype);
+      customElements.define('lazy-treegroup', class extends XTreeGroup {
+        static get observedAttributes() { return ['aria-expanded']; }
 
-      p.load = function() {
-        const loadingDiv = document.createElement('div');
-        loadingDiv.textContent = 'Loading';
-        this.shadowRoot.appendChild(loadingDiv);
-        this.initialized = true;
-
-        this.loadItems().then((items) => {
-          this.shadowRoot.removeChild(loadingDiv);
-
-          items.forEach((item) => { 
-            const el = document.createElement('x-treeitem');
-            el.textContent = item;
-            this.appendChild(el);
-          });
-        });
-      };
-
-      p.attributeChangedCallback = function(name, oldVal, newVal) {
-        if (name === 'aria-expanded' && newVal && !this.initialized) {
-          this.load();
+        attributeChangedCallback(name, oldVal, newVal) {
+          if (name === 'aria-expanded' && newVal === 'true' && !this.initialized) {
+            this.load();
+          }
         }
-      };
 
-      document.registerElement('lazy-treegroup', {
-        prototype: p
+        load() {
+          const loadingDiv = document.createElement('div');
+          loadingDiv.textContent = 'Loading';
+          this.appendChild(loadingDiv);
+          this.initialized = true;
+
+          this.loadItems().then((items) => {
+            this.removeChild(loadingDiv);
+
+            items.forEach((item) => { 
+              const el = document.createElement('x-treeitem');
+              el.textContent = item;
+              this.appendChild(el);
+            });
+          });
+        }
       });
 
       document.getElementById('LazyGroup').loadItems = function() {

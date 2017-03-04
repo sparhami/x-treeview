@@ -52,21 +52,25 @@ const XTreeItem = (function() {
       }
     </style>
 
-    <content></content>
+    <slot></slot>
   `;
- 
-  const p = Object.create(HTMLElement.prototype);
 
-  p.createdCallback = function() {
-    const sr = this.createShadowRoot();
-    sr.appendChild(tmpl.content.cloneNode(true));
+  class XTreeItem extends HTMLElement {
+    constructor() {
+      super();
 
-    this.tabIndex = -1;
-    this.setAttribute('role', 'treeitem');
-  };
+      const sr = this.attachShadow({ mode: 'closed' });
+      sr.appendChild(tmpl.content.cloneNode(true));
+    }
 
-  return document.registerElement('x-treeitem', {
-    prototype: p
-  });
+    connectedCallback() {
+      this.tabIndex = -1;
+      this.setAttribute('role', 'treeitem');
+    }
+  }
+
+  customElements.define('x-treeitem', XTreeItem);
+
+  return XTreeItem;
 })();
 </script>
