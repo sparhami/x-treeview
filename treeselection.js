@@ -69,10 +69,10 @@ const attachTreeSelection = (function() {
   }
 
   function handleBoundary(walker, forward, wrap) {
-    if (forward == wrap) {
-      first(walker);
-    } else {
+    if (forward != wrap) {
       last(walker);
+    } else {
+      first(walker);
     }
   }
 
@@ -142,8 +142,8 @@ const attachTreeSelection = (function() {
     }
   }
 
-  return function(el, config) {
-    const { wrap, trap } = config || {};
+  return function(el, config = {}) {
+    const { wrap = false, trap = false } = config;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, filter);
     let selected = walker.root;
 
