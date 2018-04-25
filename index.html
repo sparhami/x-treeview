@@ -17,9 +17,9 @@ limitations under the License.
 
 <html>
   <head>
-    <link rel="import" href="x-treeview.html">
-    <link rel="import" href="x-treegroup.html">
-    <link rel="import" href="x-treeitem.html">
+    <script type="module" src="x_treeview.js"></script>
+    <script type="module" src="x_treegroup.js"></script>
+    <script type="module" src="x_treeitem.js"></script>
 
     <style>
       body {
@@ -151,53 +151,53 @@ limitations under the License.
     </section>
   </body>
 
-  <script>
-    (function() {
-      window.addEventListener('selected', function(e) {
-        console.log('selected', e.target);
-      });
+  <script type="module">
+    import XTreeGroup from './x_treegroup.js';
+
+    window.addEventListener('selected', function(e) {
+      console.log('selected', e.target);
+    });
 
 
-      // You can also use your own Elements for groups and items to implement
-      // custom behavior. If using your own Elements, you will need to do the
-      // following: 
-      // treegroups and treeitems should both be focusable and have role="treeitem"
-      // treegroups should also have an aria-expanded attribute
-      customElements.define('lazy-treegroup', class extends XTreeGroup {
-        static get observedAttributes() { return ['aria-expanded']; }
+    // You can also use your own Elements for groups and items to implement
+    // custom behavior. If using your own Elements, you will need to do the
+    // following: 
+    // treegroups and treeitems should both be focusable and have role="treeitem"
+    // treegroups should also have an aria-expanded attribute
+    customElements.define('lazy-treegroup', class extends XTreeGroup {
+      static get observedAttributes() { return ['aria-expanded']; }
 
-        attributeChangedCallback(name, oldVal, newVal) {
-          if (name === 'aria-expanded' && newVal === 'true' && !this.initialized) {
-            this.load();
-          }
+      attributeChangedCallback(name, oldVal, newVal) {
+        if (name === 'aria-expanded' && newVal === 'true' && !this.initialized) {
+          this.load();
         }
+      }
 
-        load() {
-          const loadingDiv = document.createElement('div');
-          loadingDiv.textContent = 'Loading';
-          this.appendChild(loadingDiv);
-          this.initialized = true;
+      load() {
+        const loadingDiv = document.createElement('div');
+        loadingDiv.textContent = 'Loading';
+        this.appendChild(loadingDiv);
+        this.initialized = true;
 
-          this.loadItems().then((items) => {
-            this.removeChild(loadingDiv);
+        this.loadItems().then((items) => {
+          this.removeChild(loadingDiv);
 
-            items.forEach((item) => { 
-              const el = document.createElement('x-treeitem');
-              el.textContent = item;
-              this.appendChild(el);
-            });
+          items.forEach((item) => { 
+            const el = document.createElement('x-treeitem');
+            el.textContent = item;
+            this.appendChild(el);
           });
-        }
-      });
-
-      document.getElementById('LazyGroup').loadItems = function() {
-        return new Promise(function(resolve) {
-          setTimeout(function() {
-            resolve(['some', 'lazy', 'items']); 
-          }, 1000);
         });
       }
-    })();
+    });
+
+    document.getElementById('LazyGroup').loadItems = function() {
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          resolve(['some', 'lazy', 'items']); 
+        }, 1000);
+      });
+    };
   </script>
 
 </html>
