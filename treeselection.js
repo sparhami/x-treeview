@@ -191,7 +191,9 @@ function attachTreeSelection(el, config = {}) {
       return;
     }
 
-    if (selected) {
+    if (el === selected) {
+      el.removeAttribute('tabindex');
+    } else if (selected) {
       setSelected(selected, false);
     }
 
